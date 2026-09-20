@@ -11,8 +11,15 @@
   --color-text-excerpt: #475569;
   --color-text-meta: #94A3B8;
 
-  --font-sans: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
-  --font-hindi: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+  --font-poppins: var(--font-poppins), 'Poppins', sans-serif;
+  --font-ui: var(--font-poppins), 'Poppins', sans-serif;
+  --font-headline: var(--font-headline), 'Anek Devanagari', 'Teko', sans-serif;
+  --font-editorial: var(--font-editorial), 'Karma', serif;
+  --font-body: var(--font-editorial), 'Karma', serif;
+  --font-description: var(--font-description), 'Eczar', serif;
+  
+  --font-sans: var(--font-poppins), 'Poppins', system-ui, sans-serif;
+  --font-hindi: var(--font-headline), 'Anek Devanagari', system-ui, sans-serif;
 }
 
 @layer base {
@@ -27,7 +34,8 @@
   }
 
   body {
-    font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+    font-family: var(--font-body);
+    line-height: 1.65; /* Base & Matra Clipping Safeguard */
     background-color: #F8FAFC;
     color: #0F172A;
     -webkit-font-smoothing: antialiased;
@@ -36,7 +44,7 @@
 
   /* Devanagari text inherits the correct font automatically */
   :lang(hi) {
-    font-family: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+    font-family: var(--font-body);
   }
 
   /* Crimson text selection highlight */

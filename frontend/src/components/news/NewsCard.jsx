@@ -83,9 +83,8 @@ export default function NewsCard({ news, size = 'normal' }) {
           </div>
         )}
 
-        {/* Card body */}
         <div className="p-4">
-          <p style={{ color: '#475569', fontSize: 13, lineHeight: 1.6 }} className="line-clamp-2">
+          <p className="font-description line-clamp-2" style={{ color: '#475569', fontSize: 14, lineHeight: 1.6 }}>
             {news.summary}
           </p>
           <div className="flex items-center justify-between mt-3" style={{ fontSize: 11, color: '#94A3B8' }}>

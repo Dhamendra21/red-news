@@ -29,6 +29,10 @@ export default function AdminLayout({ children }) {
     navigate('/admin/login');
   };
 
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-slate-900 text-white transition-all duration-300 flex flex-col flex-shrink-0`}>

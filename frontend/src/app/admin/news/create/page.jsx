@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from "next/navigation";
 import dynamic from 'next/dynamic';
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-import 'react-quill/dist/quill.snow.css';
+const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
+import 'react-quill-new/dist/quill.snow.css';
 import api from "@/services/api";
 import toast from 'react-hot-toast';
 import { 
@@ -23,7 +23,7 @@ const CATEGORIES = [
 
 export default function AdminNewsForm() {
   const { id } = useParams();
-  const navigate = useRouter();
+  const router = useRouter();
   const isEdit = !!id;
 
   const [form, setForm] = useState({
@@ -148,7 +148,7 @@ export default function AdminNewsForm() {
         await api.post('/news', payload);
         toast.success('समाचार सहेजा गया');
       }
-      navigate('/admin/news');
+      router.push('/admin/news');
     } catch (err) {
       toast.error(err.response?.data?.message || 'समाचार सहेजने में समस्या');
     } finally {
@@ -179,7 +179,7 @@ export default function AdminNewsForm() {
           </h1>
           <div className="flex gap-3">
             <button
-              onClick={() => navigate('/admin/news')}
+              onClick={() => router.push('/admin/news')}
               className="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors"
             >
               रद्द करें (Back)

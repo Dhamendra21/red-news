@@ -76,7 +76,19 @@ router.get('/analytics/views-chart', protect, authorize('admin','editor'), async
       { $project: { date:'$_id', views:1, newsCount:1, likes:1, _id:0 } }
     ]);
 
-    res.json({ success:true, data });
+    // Fill missing dates so Recharts always has a continuous line
+    const filledData = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const dateStr = `${day}/${month}`;
+      
+      const existing = data.find(item => item.date === dateStr);
+      filledData.push(existing || { date: dateStr, views: 0, newsCount: 0, likes: 0 });
+    }
+
+    res.json({ success:true, data: filledData });
   } catch (err) {
     res.status(500).json({ success:false, message:err.message });
   }

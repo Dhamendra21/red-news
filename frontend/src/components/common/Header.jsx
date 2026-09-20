@@ -84,7 +84,7 @@ export default function Header() {
       }}>
 
         {/* ── Utility Top Bar ── */}
-        <div style={{ background: C.dark, padding: '5px 0' }}>
+        <div className="hidden md:block" style={{ background: C.dark, padding: '5px 0' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {/* Date */}
             <span style={{ color: C.meta, fontSize: 11, letterSpacing: '0.03em' }}>
@@ -220,9 +220,9 @@ export default function Header() {
           </div>
         </div>
 
-        {/* ── Desktop Nav Bar ── */}
-        <nav className="scrollbar-none" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `2px solid ${C.red}`, overflowX: 'auto', background: '#fff' }}>
-          <div style={{ display: 'flex', minWidth: 'max-content', padding: '0 16px' }}>
+        {/* ── Desktop & Mobile Swipeable Nav Bar ── */}
+        <nav className="flex items-center gap-4 overflow-x-auto whitespace-nowrap scrollbar-none px-4 py-2.5 border-b border-slate-200 bg-white" style={{ borderBottom: `2px solid ${C.red}` }}>
+          <div style={{ display: 'flex', minWidth: 'max-content', padding: '0 8px' }}>
             <Link href="/" style={navLinkStyle('/')}>होम</Link>
             {NAV_ITEMS.map(item => (
               <Link key={item.id} href={item.path} style={navLinkStyle(item.path)}>

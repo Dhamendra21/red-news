@@ -122,7 +122,28 @@ exports.updateNews = async (req, res) => {
         });
 
         const wasDraft = news.status !== "published";
+
+        const oldImages = news.images || [];
+        const newImages = req.body.images || [];
+        const oldFileIds = oldImages.map(i => i.fileId).filter(Boolean);
+        const newFileIds = newImages.map(i => i.fileId).filter(Boolean);
+        const deletedFileIds = oldFileIds.filter(id => !newFileIds.includes(id));
+
         news = await News.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+
+        // Delete removed images from ImageKit
+        if (deletedFileIds.length > 0) {
+            try {
+                const { deleteImage } = require('../services/imageKit');
+                if (deleteImage) {
+                    for (const id of deletedFileIds) {
+                        await deleteImage(id).catch(() => {});
+                    }
+                }
+            } catch (err) {
+                console.warn('⚠️ Could not delete images from ImageKit:', err.message);
+            }
+        }
 
         // Send notification if newly published
         if (wasDraft && news.status === 'published' && !news.notificationSent) {
@@ -152,6 +173,20 @@ exports.deleteNews = async (req, res) => {
             success: false,
             message: "खबर नहीं मिली"
         });
+
+        // Delete all images from ImageKit
+        if (news.images && news.images.length > 0) {
+            try {
+                const { deleteImage } = require('../services/imageKit');
+                if (deleteImage) {
+                    for (const img of news.images) {
+                        if (img.fileId) await deleteImage(img.fileId).catch(() => {});
+                    }
+                }
+            } catch (err) {
+                console.warn('⚠️ Could not delete images from ImageKit:', err.message);
+            }
+        }
 
         res.status(200).json({ success: true, message: "खबर हटाई गई" });
     } catch (error) {

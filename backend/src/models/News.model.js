@@ -14,7 +14,7 @@ const NewsSchema = new mongoose.Schema({
     'science', 'environment', 'reader-news', 'politics',
     'entertainment', 'technology', 'health', 'business',
     'education', 'lifestyle', 'travel', 'food', 'opinion',
-    'national'
+    'national', 'state', 'crime'
   ]
   },
   tags:   [{ type: String }],

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchNewsBySlug, fetchNews } from "@/store/slice/NewsSlice";
 import CommentSection from "@/components/news/CommonSection";
 import api from "@/services/api";
-import { MessageCircle, Send, Link as LinkIcon, Check, Share2, Eye, MessageSquare, Globe, Clock, ThumbsUp, TrendingUp, Mail, Briefcase, Volume2, Play, Square } from "lucide-react";
+import { MessageCircle, Send, Link as LinkIcon, Check, Share2, Eye, MessageSquare, Globe, Clock, ThumbsUp, TrendingUp, Mail, Briefcase, Volume2, Play, Square, X } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/hi";
@@ -63,7 +63,7 @@ const formatAIContent = (text) => {
 // ── Share Buttons ─────────────────────────────────────────
 const ShareSection = ({ news }) => {
   const [copied, setCopied] = useState(false);
-  const url = window.location.href;
+  const url = typeof window !== 'undefined' ? `${window.location.origin}/news/${news?._id}` : "";
   const title = news?.title || "";
   const text = `${title}\n${url}`;
 
@@ -104,12 +104,6 @@ const ShareSection = ({ news }) => {
       color: "#000000",
       icon: <MessageSquare size={14} />,
       url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
-    },
-    {
-      name: "Telegram",
-      color: "#0088cc",
-      icon: <Send size={14} />,
-      url: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
     },
     {
       name: "LinkedIn",
@@ -271,7 +265,7 @@ const RelatedCard = ({ news }) => (
     <div style={{ borderRadius: 8, overflow: "hidden", marginBottom: 8 }}>
       <img
         src={
-          `https://placehold.co/300x180/e2e8f0/94a3b8?text=News`
+          news.images?.[0]?.url || `https://placehold.co/300x180/e2e8f0/94a3b8?text=News`
         }
         alt={news.title}
         style={{
@@ -319,6 +313,7 @@ export default function NewsDetailPage() {
   const [selectedLang, setSelectedLang] = useState("hindi");
   const [isTranslating, setIsTranslating] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
+  const [previewImage, setPreviewImage] = useState(null);
   const [liked, setLiked] = useState(false);
   const [email, setEmail] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
@@ -432,7 +427,7 @@ export default function NewsDetailPage() {
     <>
       
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 16px" }}>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Breadcrumb */}
         <div
           style={{
@@ -461,26 +456,11 @@ export default function NewsDetailPage() {
         </div>
 
         {/* Grid Layout */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0,1fr) 300px",
-            gap: 32,
-          }}
-          className="news-detail-grid"
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-8 items-start">
           {/* ── ARTICLE ── */}
-          <article>
+          <article className="w-full min-w-0 break-words">
             {/* Title */}
-            <h1
-              style={{
-                fontSize: "clamp(20px, 4vw, 28px)",
-                fontWeight: 800,
-                color: "#1a202c",
-                lineHeight: 1.35,
-                margin: "0 0 16px",
-              }}
-            >
+            <h1 className="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl text-slate-900 leading-snug mb-4">
               {news.isBreaking && (
                 <span
                   style={{
@@ -556,70 +536,45 @@ export default function NewsDetailPage() {
               </div>
             </div>
 
-            {/* Main Image */}
+            {/* Images Grid / Main Image */}
             {news.images?.length > 0 && (
               <div style={{ marginBottom: 20 }}>
-                <div style={{ borderRadius: 10, overflow: "hidden" }}>
-                  <img
-                    src={news.images[imgIndex]?.url}
-                    alt={news.title}
-                    style={{
-                      width: "100%",
-                      maxHeight: 420,
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                    onError={(e) => {
-                      e.target.src = `https://placehold.co/720x400/e2e8f0/94a3b8?text=News`;
-                    }}
-                  />
-                </div>
-                {news.images[imgIndex]?.caption && (
-                  <p
-                    style={{
-                      fontSize: 12,
-                      color: "#718096",
-                      margin: "6px 0 0",
-                      textAlign: "center",
-                      fontStyle: "italic",
-                    }}
-                  >
-                    {news.images[imgIndex].caption}
-                  </p>
-                )}
-                {news.images.length > 1 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 6,
-                      marginTop: 8,
-                      justifyContent: "center",
-                    }}
-                  >
+                {news.images.length === 1 ? (
+                  // Single Image
+                  <div style={{ borderRadius: 10, overflow: "hidden", position: "relative" }}>
+                    <img
+                      src={news.images[0].url}
+                      alt={news.title}
+                      className="w-full h-auto aspect-video object-cover rounded-xl"
+                      style={{ display: "block", cursor: "pointer" }}
+                      onClick={() => setPreviewImage(news.images[0])}
+                      onError={(e) => { e.target.src = `https://placehold.co/720x400/e2e8f0/94a3b8?text=News`; }}
+                    />
+                    {news.images[0].caption && (
+                      <p style={{ fontSize: 12, color: "#718096", margin: "6px 0 0", textAlign: "center", fontStyle: "italic" }}>
+                        {news.images[0].caption}
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  // Multiple Images Grid
+                  <div className="image-gallery-grid" style={{ 
+                    display: "grid", 
+                    gridTemplateColumns: news.images.length === 2 ? "1fr 1fr" : "repeat(auto-fill, minmax(200px, 1fr))", 
+                    gap: 12 
+                  }}>
                     {news.images.map((img, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setImgIndex(i)}
-                        style={{
-                          width: 52,
-                          height: 40,
-                          border: `2px solid ${i === imgIndex ? catColor : "#e2e8f0"}`,
-                          borderRadius: 4,
-                          overflow: "hidden",
-                          cursor: "pointer",
-                          padding: 0,
-                        }}
-                      >
+                      <div key={i} style={{ borderRadius: 8, overflow: "hidden", position: "relative" }}>
                         <img
                           src={img.url}
-                          alt=""
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
+                          alt={news.title}
+                          style={{ width: "100%", height: 200, objectFit: "cover", display: "block", cursor: "pointer", transition: "transform 0.3s" }}
+                          onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                          onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+                          onClick={() => setPreviewImage(img)}
+                          onError={(e) => { e.target.src = `https://placehold.co/300x200/e2e8f0/94a3b8?text=News`; }}
                         />
-                      </button>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -752,12 +707,7 @@ export default function NewsDetailPage() {
             {/* Content — AI bold fix */}
             {/* Content */}
             <div
-              style={{
-                fontSize: 16,
-                lineHeight: 1.85,
-                color: "#2d3748",
-                fontFamily: "Georgia, serif",
-              }}
+              className="font-body text-slate-800 text-base sm:text-lg leading-relaxed sm:leading-loose"
               dangerouslySetInnerHTML={{
                 __html: `<p style="margin-bottom:16px">${formatAIContent(displayContent)}</p>`,
               }}
@@ -834,9 +784,10 @@ export default function NewsDetailPage() {
           </article>
 
           {/* ── SIDEBAR ── */}
-          <aside className="news-sidebar">
+          <aside className="w-full lg:w-[320px] space-y-6">
             {/* Ad */}
             <div
+              className="w-full max-w-full overflow-hidden"
               style={{
                 background: "#f7fafc",
                 border: "1px dashed #cbd5e0",
@@ -976,6 +927,7 @@ export default function NewsDetailPage() {
 
             {/* Ad 300x600 */}
             <div
+              className="w-full max-w-full overflow-hidden"
               style={{
                 background: "#f7fafc",
                 border: "1px dashed #cbd5e0",
@@ -1044,10 +996,66 @@ export default function NewsDetailPage() {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 768px) {
-          .news-detail-grid { grid-template-columns: 1fr !important; }
-          .news-sidebar { display: none; }
+          .image-gallery-grid { grid-template-columns: 1fr !important; }
+          .image-gallery-grid img { height: auto !important; aspect-ratio: 16/9; }
         }
       `}</style>
+
+      {/* Full Screen Image Preview Modal */}
+      {previewImage && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.9)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 20,
+          }}
+          onClick={() => setPreviewImage(null)}
+        >
+          <button
+            style={{
+              position: "absolute",
+              top: 20,
+              right: 20,
+              background: "rgba(255, 255, 255, 0.2)",
+              border: "none",
+              color: "#fff",
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              transition: "background 0.3s",
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.4)"}
+            onMouseOut={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)"}
+            onClick={() => setPreviewImage(null)}
+          >
+            <X size={24} />
+          </button>
+          <div style={{ maxWidth: "100%", maxHeight: "100%", textAlign: "center" }} onClick={e => e.stopPropagation()}>
+            <img 
+              src={previewImage.url} 
+              alt="Preview" 
+              style={{ maxWidth: "100%", maxHeight: "85vh", objectFit: "contain", borderRadius: 8, boxShadow: "0 10px 30px rgba(0,0,0,0.5)" }} 
+            />
+            {previewImage.caption && (
+              <p style={{ color: "#fff", marginTop: 16, fontSize: 16, fontWeight: 500 }}>
+                {previewImage.caption}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import api from "@/services/api";
 import toast from 'react-hot-toast';
 import { Megaphone, MapPin, Eye, MousePointer2, Trash2, Plus } from 'lucide-react';
+import ImageCropperModal from '@/components/admin/ImageCropperModal';
 
 const AD_POSITIONS = [
   'home-top', 'home-mid', 'home-bottom', 'sidebar-1', 'sidebar-2',
@@ -17,7 +18,10 @@ export default function AdminAds() {
     link: '', googleAdCode: '', isGoogleAd: false, isActive: true
   });
   const [imageFile, setImageFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null); // For display in form
   const [isLoading, setIsLoading] = useState(false);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [cropImageSrc, setCropImageSrc] = useState(null);
 
   useEffect(() => { fetchAds(); }, []);
 
@@ -41,6 +45,36 @@ export default function AdminAds() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      
+      // Limit file size to 2MB
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('File size exceeds 2MB limit. Please select a smaller image.');
+        e.target.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        setCropImageSrc(reader.result?.toString() || '');
+        setCropModalOpen(true);
+      });
+      reader.readAsDataURL(file);
+      e.target.value = ''; // Reset input so same file can be selected again if cancelled
+    }
+  };
+
+  const handleCropComplete = (blob) => {
+    // Convert blob to File
+    const file = new File([blob], "ad-image-cropped.jpg", { type: "image/jpeg" });
+    setImageFile(file);
+    setImagePreviewUrl(URL.createObjectURL(blob));
+    setCropModalOpen(false);
+    setCropImageSrc(null);
   };
 
   const handleDelete = async (id) => {
@@ -71,8 +105,20 @@ export default function AdminAds() {
             </select>
             <input placeholder="लिंक URL" value={form.link} onChange={e => setForm({ ...form, link: e.target.value })}
               className="border rounded-lg px-4 py-2 text-sm outline-none focus:border-green-500" />
-            <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])}
-              className="border rounded-lg px-4 py-2 text-sm" />
+            
+            <div className="flex flex-col gap-2">
+              <input type="file" accept="image/*" onChange={handleFileChange}
+                className="border rounded-lg px-4 py-2 text-sm" />
+              {imagePreviewUrl && (
+                <div className="relative inline-block w-fit mt-2">
+                  <img src={imagePreviewUrl} alt="Preview" className="h-20 object-contain rounded border" />
+                  <button type="button" onClick={() => { setImageFile(null); setImagePreviewUrl(null); }} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow hover:bg-red-600">
+                    <Trash2 size={12} />
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="md:col-span-2">
               <label className="flex items-center gap-2 mb-2 cursor-pointer">
                 <input type="checkbox" checked={form.isGoogleAd} onChange={e => setForm({ ...form, isGoogleAd: e.target.checked })} className="accent-green-600" />
@@ -109,6 +155,13 @@ export default function AdminAds() {
           </div>
         ))}
       </div>
+
+      <ImageCropperModal
+        isOpen={cropModalOpen}
+        onClose={() => setCropModalOpen(false)}
+        imageSrc={cropImageSrc}
+        onCropComplete={handleCropComplete}
+      />
     </div>
   );
 }

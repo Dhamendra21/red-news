@@ -14,17 +14,17 @@ export default function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await dispatch(login(form));
-    if (!result.error) navigate('/admin');
+    if (!result.error) navigate.push('/admin');
   };
 
   return (
-    <div className="min-h-screen bg-green-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-red-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
-            र
+          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+            RN
           </div>
-          <h1 className="text-2xl font-bold text-green-800" style={{ fontFamily: 'serif' }}>Colour weekly </h1>
+          <h1 className="text-2xl font-bold text-red-800" style={{ fontFamily: 'serif' }}>RED NEWS </h1>
           <p className="text-gray-500 text-sm mt-1">संपादक पैनल में लॉगिन करें</p>
         </div>
 
@@ -37,7 +37,7 @@ export default function AdminLogin() {
               type="email"
               value={form.email}
               onChange={e => setForm({ ...form, email: e.target.value })}
-              className="w-full border rounded-lg px-4 py-3 outline-none focus:border-green-500"
+              className="w-full border rounded-lg px-4 py-3 outline-none focus:border-red-500"
               required
             />
           </div>
@@ -47,14 +47,14 @@ export default function AdminLogin() {
               type="password"
               value={form.password}
               onChange={e => setForm({ ...form, password: e.target.value })}
-              className="w-full border rounded-lg px-4 py-3 outline-none focus:border-green-500"
+              className="w-full border rounded-lg px-4 py-3 outline-none focus:border-red-500"
               required
             />
           </div>
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 disabled:opacity-60 transition-colors"
+            className="w-full bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700 disabled:opacity-60 transition-colors"
           >
             {isLoading ? 'लॉगिन हो रहा है...' : 'लॉगिन करें'}
           </button>
