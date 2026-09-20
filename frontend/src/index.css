@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #DC2626;
+  --color-brand-red-dark: #B91C1C;
+  --color-surface-dark: #0F172A;
+  --color-surface-mid: #1E293B;
+  --color-surface-light: #F8FAFC;
+  --color-border-subtle: #E2E8F0;
+  --color-text-headline: #0F172A;
+  --color-text-excerpt: #475569;
+  --color-text-meta: #94A3B8;
+
+  --font-sans: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-hindi: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+    background-color: #F8FAFC;
+    color: #0F172A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Devanagari text inherits the correct font automatically */
+  :lang(hi) {
+    font-family: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+  }
+
+  /* Crimson text selection highlight */
+  ::selection {
+    background: rgba(220, 38, 38, 0.15);
+    color: #0F172A;
+  }
+}
+
+@layer utilities {
+  /* ── Breaking News Ticker marquee ── */
+  @keyframes marquee-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-ticker {
+    animation: marquee-scroll 35s linear infinite;
+  }
+
+  .animate-ticker:hover {
+    animation-play-state: paused;
+  }
+
+  /* ── Scrollbar hide for nav ── */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Live pulse dot ── */
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.35; transform: scale(0.85); }
+  }
+  .animate-live-dot {
+    animation: live-pulse 1.2s ease-in-out infinite;
+  }
+
+  /* ── Fade-in-up entrance ── */
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fade-in-up 0.4s ease-out both;
+  }
+
+  /* ── Section heading left-bar accent ── */
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #0F172A;
+  }
+  .section-heading::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 22px;
+    background: #DC2626;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── Crimson form focus ring ── */
+  .focus-ring-red:focus {
+    outline: none;
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+  }
+
+  /* ── Spinner (brand red) ── */
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .spinner-red {
+    width: 40px; height: 40px;
+    border: 3px solid #E2E8F0;
+    border-top-color: #DC2626;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+  }
+}
