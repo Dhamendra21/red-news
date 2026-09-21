@@ -51,9 +51,9 @@ export default function AdminAds() {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       
-      // Limit file size to 2MB
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error('File size exceeds 2MB limit. Please select a smaller image.');
+      // Limit file size to 5MB
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error('File size exceeds 10MB limit. Please select a smaller image.');
         e.target.value = '';
         return;
       }

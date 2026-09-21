@@ -2,6 +2,8 @@
 import React from 'react';
 import Link from "next/link";
 import { Send, Bell, Heart, Globe, MessageSquare, Tv } from 'lucide-react';
+import api from '../../services/api';
+import { requestNotificationPermission } from '../../services/firebase';
 
 const FOOTER_CATEGORIES = [
   { id: 'politics',      name: 'राजनीति' },
@@ -34,11 +36,18 @@ const linkStyle = {
 };
 
 export default function Footer() {
-  const handleNotification = () => {
-    if ('Notification' in window) {
-      Notification.requestPermission().then(p => {
-        if (p === 'granted') alert('सूचनाएं सक्रिय हो गई हैं!');
-      });
+  const handleNotification = async () => {
+    try {
+      const token = await requestNotificationPermission();
+      if (token) {
+        await api.post('/notifications/subscribe', { token });
+        alert('सूचनाएं सक्रिय हो गई हैं!');
+      } else {
+        alert('सूचनाएं चालू करने के लिए अनुमति की आवश्यकता है।');
+      }
+    } catch (error) {
+      console.error('Error activating notifications:', error);
+      alert('कुछ गलत हो गया। कृपया बाद में प्रयास करें।');
     }
   };
 
@@ -52,22 +61,8 @@ export default function Footer() {
           {/* ── Col 1: Brand ── */}
           <div>
             {/* Logo */}
-            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ background: '#DC2626', borderRadius: 6, padding: '6px 10px' }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="white" opacity="0.9"/>
-                  <path d="M12 2L2 7l10 5 10-5L12 2z" fill="white"/>
-                </svg>
-              </div>
-              <div>
-                <div style={{ fontWeight: 900, fontSize: 17, lineHeight: 1 }}>
-                  <span style={{ color: '#DC2626' }}>RED </span>
-                  <span style={{ color: '#fff' }}>NEWS BHARAT</span>
-                </div>
-                <div style={{ fontSize: 10, color: '#475569', letterSpacing: '0.1em', marginTop: 2, textTransform: 'uppercase' }}>
-                  हिंदी समाचार पोर्टल
-                </div>
-              </div>
+            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+              <img src="/logo.webp" alt="RED NEWS BHARAT" style={{ height: 45, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </Link>
 
             <p style={{ color: '#64748B', fontSize: 13, lineHeight: 1.8, marginBottom: 20 }}>

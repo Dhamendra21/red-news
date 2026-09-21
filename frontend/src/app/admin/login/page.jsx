@@ -21,8 +21,8 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-red-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
-            RN
+          <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+            <img src="/logo.webp" alt="RED NEWS" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-2xl font-bold text-red-800" style={{ fontFamily: 'serif' }}>RED NEWS </h1>
           <p className="text-gray-500 text-sm mt-1">संपादक पैनल में लॉगिन करें</p>

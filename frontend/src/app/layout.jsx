@@ -29,6 +29,9 @@ const eczar = Eczar({
 export const metadata = {
   title: 'RED NEWS BHARAT - देश का सबसे तेज हिंदी समाचार',
   description: 'RED NEWS BHARAT: सत्य और साहस की पत्रकारिता।',
+  icons: {
+    icon: '/logo.webp',
+  },
 };
 
 export default function RootLayout({ children }) {

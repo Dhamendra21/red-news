@@ -7,6 +7,7 @@ import { fetchNewsBySlug, fetchNews } from "@/store/slice/NewsSlice";
 import CommentSection from "@/components/news/CommonSection";
 import api from "@/services/api";
 import { MessageCircle, Send, Link as LinkIcon, Check, Share2, Eye, MessageSquare, Globe, Clock, ThumbsUp, TrendingUp, Mail, Briefcase, Volume2, Play, Square, X } from "lucide-react";
+import AdUnit from "@/components/common/AdUnit";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/hi";
@@ -459,6 +460,9 @@ export default function NewsDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-8 items-start">
           {/* ── ARTICLE ── */}
           <article className="w-full min-w-0 break-words">
+            {/* Article Top Ad */}
+            <AdUnit position="article-top" />
+
             {/* Title */}
             <h1 className="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl text-slate-900 leading-snug mb-4">
               {news.isBreaking && (
@@ -704,6 +708,9 @@ export default function NewsDetailPage() {
               </button>
             </div>
 
+            {/* Article Mid Ad */}
+            <AdUnit position="article-mid" />
+
             {/* Content — AI bold fix */}
             {/* Content */}
             <div
@@ -712,6 +719,9 @@ export default function NewsDetailPage() {
                 __html: `<p style="margin-bottom:16px">${formatAIContent(displayContent)}</p>`,
               }}
             />
+
+            {/* Article Bottom Ad */}
+            <AdUnit position="article-bottom" />
 
             {/* Tags */}
             {news.tags?.length > 0 && (
@@ -785,26 +795,8 @@ export default function NewsDetailPage() {
 
           {/* ── SIDEBAR ── */}
           <aside className="w-full lg:w-[320px] space-y-6">
-            {/* Ad */}
-            <div
-              className="w-full max-w-full overflow-hidden"
-              style={{
-                background: "#f7fafc",
-                border: "1px dashed #cbd5e0",
-                borderRadius: 8,
-                height: 250,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#a0aec0",
-                fontSize: 12,
-                marginBottom: 20,
-              }}
-            >
-              ADVERTISEMENT
-              <br />
-              300 × 250
-            </div>
+            {/* Ad sidebar-1 */}
+            <AdUnit position="sidebar-1" />
 
             {/* Trending */}
             <div
@@ -925,25 +917,8 @@ export default function NewsDetailPage() {
               </button>
             </div>
 
-            {/* Ad 300x600 */}
-            <div
-              className="w-full max-w-full overflow-hidden"
-              style={{
-                background: "#f7fafc",
-                border: "1px dashed #cbd5e0",
-                borderRadius: 8,
-                height: 400,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#a0aec0",
-                fontSize: 12,
-              }}
-            >
-              ADVERTISEMENT
-              <br />
-              300 × 400
-            </div>
+            {/* Ad sidebar-2 */}
+            <AdUnit position="sidebar-2" />
           </aside>
         </div>
 

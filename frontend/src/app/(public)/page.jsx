@@ -56,8 +56,8 @@ export default function HomePage() {
           ══════════════════════════════════════════ */}
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
 
-            {/* ── Featured / Hero Story ── */}
-            <div className="lg:col-span-2">
+            {/* ── Featured / Hero Story & Trending ── */}
+            <div className="lg:col-span-2 flex flex-col gap-10">
               {featuredNews && (
                 <Link href={`/news/${featuredNews.slug}`}
                   className="group block overflow-hidden"
@@ -104,106 +104,109 @@ export default function HomePage() {
                   </div>
                 </Link>
               )}
-            </div>
 
-            {/* ── Trending / बड़ी खबरें Sidebar ── */}
-            <div className="flex flex-col gap-0" style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: 10, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-              {/* Sidebar header */}
-              <div style={{ borderBottom: '3px solid #DC2626', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h2 style={{ fontWeight: 800, fontSize: 15, color: '#0F172A', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ background: '#DC2626', color: '#fff', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 2, letterSpacing: '0.05em' }}>TOP</span>
-                  बड़ी खबरें
-                </h2>
-                <Link href="/trending" style={{ fontSize: 12, color: '#DC2626', fontWeight: 600, textDecoration: 'none' }}>
-                  सभी →
-                </Link>
-              </div>
-
-              {/* Numbered story list */}
-              {topNews.map((item, i) => (
-                <Link key={item._id}
-                  href={`/news/${item.slug}`}
-                  className="group flex gap-3 p-4"
-                  style={{ borderBottom: '1px solid #E2E8F0', textDecoration: 'none' }}
-                >
-                  {/* Rank number */}
-                  <span style={{ fontWeight: 900, fontSize: 22, color: '#E2E8F0', lineHeight: 1, flexShrink: 0, width: 28, fontFamily: 'Inter, sans-serif' }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    {item.images?.[0] && (
-                      <div style={{ height: 80, borderRadius: 6, overflow: 'hidden', marginBottom: 8 }}>
-                        <img src={item.images[0].url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                      </div>
-                    )}
-                    <h3 style={{ fontWeight: 700, fontSize: 13, color: '#0F172A', lineHeight: 1.4 }} className="line-clamp-2 group-hover:text-[#DC2626] transition-colors">
-                      {item.title}
-                    </h3>
-                    <p style={{ fontSize: 11, color: '#94A3B8', marginTop: 4 }}>
-                      {new Date(item.publishedAt).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short' })}
-                    </p>
+              {/* ══════════════════════════════════════════
+                  TRENDING SECTION (Moved to left column)
+              ══════════════════════════════════════════ */}
+              {trending?.length > 0 && (
+                <section>
+                  {/* Section heading */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                    <h2 style={{ fontWeight: 800, fontSize: 18, color: '#0F172A', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ display: 'inline-block', width: 4, height: 20, background: '#DC2626', borderRadius: 2 }} />
+                      <Flame size={20} color="#DC2626" /> ट्रेंडिंग खबरें
+                    </h2>
+                    <Link href="/trending" style={{ fontSize: 13, color: '#DC2626', fontWeight: 600, textDecoration: 'none' }}>
+                      सभी देखें →
+                    </Link>
                   </div>
-                </Link>
-              ))}
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {trending.slice(0, 4).map((item, i) => (
+                      <Link key={item._id}
+                        href={`/news/${item.slug}`}
+                        className="group relative block"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        {/* Rank badge */}
+                        <div style={{
+                          position: 'absolute', top: 8, left: 8, zIndex: 10,
+                          width: 26, height: 26, background: '#DC2626', color: '#fff',
+                          borderRadius: '50%', display: 'flex', alignItems: 'center',
+                          justifyContent: 'center', fontSize: 11, fontWeight: 800,
+                          fontFamily: 'Inter, sans-serif',
+                        }}>{i + 1}</div>
+
+                        {/* Thumbnail */}
+                        {item.images?.[0] ? (
+                          <div style={{ height: 110, borderRadius: 8, overflow: 'hidden', border: '1px solid #E2E8F0' }}>
+                            <img
+                              src={item.images[0].url}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        ) : (
+                          <div style={{ height: 110, borderRadius: 8, background: '#F1F5F9', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Newspaper size={28} color="#94A3B8" />
+                          </div>
+                        )}
+
+                        <p style={{ fontSize: 12, fontWeight: 600, color: '#0F172A', marginTop: 6, lineHeight: 1.4 }}
+                          className="line-clamp-2 group-hover:text-[#DC2626] transition-colors">
+                          {item.title}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
-          </section>
 
-          {/* ══════════════════════════════════════════
-              TRENDING SECTION
-          ══════════════════════════════════════════ */}
-          {trending?.length > 0 && (
-            <section className="mb-10">
-              {/* Section heading */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-                <h2 style={{ fontWeight: 800, fontSize: 18, color: '#0F172A', display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ display: 'inline-block', width: 4, height: 20, background: '#DC2626', borderRadius: 2 }} />
-                  <Flame size={20} color="#DC2626" /> ट्रेंडिंग खबरें
-                </h2>
-                <Link href="/trending" style={{ fontSize: 13, color: '#DC2626', fontWeight: 600, textDecoration: 'none' }}>
-                  सभी देखें →
-                </Link>
-              </div>
+            {/* ── Sidebar Column ── */}
+            <div className="flex flex-col gap-6">
+              {/* ── Trending / बड़ी खबरें Sidebar ── */}
+              <div className="flex flex-col gap-0" style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: 10, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                {/* Sidebar header */}
+                <div style={{ borderBottom: '3px solid #DC2626', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <h2 style={{ fontWeight: 800, fontSize: 15, color: '#0F172A', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ background: '#DC2626', color: '#fff', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 2, letterSpacing: '0.05em' }}>TOP</span>
+                    बड़ी खबरें
+                  </h2>
+                  <Link href="/trending" style={{ fontSize: 12, color: '#DC2626', fontWeight: 600, textDecoration: 'none' }}>
+                    सभी →
+                  </Link>
+                </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {trending.slice(0, 5).map((item, i) => (
+                {/* Numbered story list */}
+                {topNews.map((item, i) => (
                   <Link key={item._id}
                     href={`/news/${item.slug}`}
-                    className="group relative block"
-                    style={{ textDecoration: 'none' }}
+                    className="group flex gap-3 p-4"
+                    style={{ borderBottom: '1px solid #E2E8F0', textDecoration: 'none' }}
                   >
-                    {/* Rank badge */}
-                    <div style={{
-                      position: 'absolute', top: 8, left: 8, zIndex: 10,
-                      width: 26, height: 26, background: '#DC2626', color: '#fff',
-                      borderRadius: '50%', display: 'flex', alignItems: 'center',
-                      justifyContent: 'center', fontSize: 11, fontWeight: 800,
-                      fontFamily: 'Inter, sans-serif',
-                    }}>{i + 1}</div>
-
-                    {/* Thumbnail */}
-                    {item.images?.[0] ? (
-                      <div style={{ height: 110, borderRadius: 8, overflow: 'hidden', border: '1px solid #E2E8F0' }}>
-                        <img
-                          src={item.images[0].url}
-                          alt={item.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    ) : (
-                      <div style={{ height: 110, borderRadius: 8, background: '#F1F5F9', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Newspaper size={28} color="#94A3B8" />
-                      </div>
-                    )}
-
-                    <p style={{ fontSize: 12, fontWeight: 600, color: '#0F172A', marginTop: 6, lineHeight: 1.4 }}
-                      className="line-clamp-2 group-hover:text-[#DC2626] transition-colors">
-                      {item.title}
-                    </p>
+                    {/* Rank number */}
+                    <span style={{ fontWeight: 900, fontSize: 22, color: '#E2E8F0', lineHeight: 1, flexShrink: 0, width: 28, fontFamily: 'Inter, sans-serif' }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      {item.images?.[0] && (
+                        <div style={{ height: 80, borderRadius: 6, overflow: 'hidden', marginBottom: 8 }}>
+                          <img src={item.images[0].url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        </div>
+                      )}
+                      <h3 style={{ fontWeight: 700, fontSize: 13, color: '#0F172A', lineHeight: 1.4 }} className="line-clamp-2 group-hover:text-[#DC2626] transition-colors">
+                        {item.title}
+                      </h3>
+                    </div>
                   </Link>
                 ))}
               </div>
-            </section>
-          )}
+
+              {/* Sidebar Ad 1 */}
+              <AdUnit position="sidebar-1" />
+            </div>
+          </section>
 
           {/* Mid Ad */}
           <AdUnit position="home-mid" />

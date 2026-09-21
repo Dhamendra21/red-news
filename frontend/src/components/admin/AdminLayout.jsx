@@ -37,7 +37,9 @@ export default function AdminLayout({ children }) {
     <div className="min-h-screen bg-gray-100 flex">
       <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-slate-900 text-white transition-all duration-300 flex flex-col flex-shrink-0`}>
         <div className="p-4 border-b border-slate-800 flex items-center gap-3">
-          <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0 shadow-sm">RN</div>
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
+            <img src="/logo.webp" alt="RED NEWS" className="w-full h-full object-contain filter brightness-0 invert" />
+          </div>
           {sidebarOpen && (
             <div className="flex flex-col">
               <span className="font-bold text-sm tracking-wider text-white">RED NEWS BHARAT</span>

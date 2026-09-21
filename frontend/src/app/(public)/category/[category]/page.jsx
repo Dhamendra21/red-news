@@ -7,6 +7,8 @@ import { fetchNews } from "@/store/slice/NewsSlice";
 import NewsCard from "@/components/news/NewsCard";
 import { Newspaper } from 'lucide-react';
 
+import AdUnit from "@/components/common/AdUnit";
+
 const CAT_NAMES = {
   trending:      'ट्रेंडिंग',
   international: 'अंतर्राष्ट्रीय',
@@ -61,6 +63,8 @@ export default function CategoryPage() {
         </div>
         <div style={{ height: 1, background: '#E2E8F0', marginLeft: 14 }} />
       </div>
+
+      <AdUnit position="category-top" />
 
       {isLoading ? (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 0', gap: 14 }}>

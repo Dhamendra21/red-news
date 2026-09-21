@@ -114,7 +114,7 @@ export default function ImageCropperModal({ isOpen, onClose, imageSrc, onCropCom
                 ref={imgRef}
                 alt="Crop me"
                 src={imageSrc}
-                className="max-w-full max-h-[50vh] object-contain"
+                style={{ maxWidth: '100%', maxHeight: '50vh' }}
                 onLoad={onImageLoad}
               />
             </ReactCrop>

@@ -137,32 +137,8 @@ export default function Header() {
           </button>
 
           {/* ── Logo ── */}
-          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, flex: 1, justifyContent: 'center' }}>
-            {/* Icon pill */}
-            <div style={{
-              background: C.red,
-              borderRadius: 6,
-              padding: '6px 10px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0,
-            }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
-                <path d="M12 2L3 6v6.5C3 17.5 12 22 12 22s9-4.5 9-9.5V6l-9-4z" fill="white" opacity="0.9"/>
-                <path d="M12 2L3 6l9 4 9-4-9-4z" fill="white"/>
-                <path d="M12 6L3 10v2.5C3 17.5 12 22 12 22V6z" fill="white" opacity="0.4"/>
-              </svg>
-            </div>
-
-            {/* Brand wordmark */}
-            <div>
-              <div style={{ lineHeight: 1, letterSpacing: '-0.02em' }}>
-                <span style={{ fontSize: 22, fontWeight: 900, color: C.red }}>RED </span>
-                <span style={{ fontSize: 22, fontWeight: 900, color: C.dark }}>NEWS BHARAT</span>
-              </div>
-              <div style={{ fontSize: 9.5, color: C.meta, letterSpacing: '0.12em', marginTop: 2, textTransform: 'uppercase' }}>
-                भारत का सबसे तेज़ हिंदी समाचार
-              </div>
-            </div>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+            <img src="/logo.webp" alt="RED NEWS BHARAT" style={{ height: 45, objectFit: 'contain' }} />
           </Link>
 
           {/* ── Right Actions ── */}
@@ -247,9 +223,8 @@ export default function Header() {
           }}>
             {/* Drawer header */}
             <div style={{ padding: '14px 16px', borderBottom: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: C.dark }}>
-              <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ background: C.red, borderRadius: 5, padding: '4px 8px', fontSize: 13, color: '#fff', fontWeight: 900 }}>RED</div>
-                <span style={{ fontWeight: 800, color: '#fff', fontSize: 15 }}>NEWS BHARAT</span>
+              <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                <img src="/logo.webp" alt="RED NEWS BHARAT" style={{ height: 32, objectFit: 'contain' }} />
               </Link>
               <button onClick={() => setMobileMenuOpen(false)}
                 style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: C.meta }}>✕</button>
