@@ -7,21 +7,23 @@ import { FileText, Settings, User, Home } from 'lucide-react';
 
 const NAV_ITEMS = [
   { id: 'politics',      name: 'राजनीति',        path: '/category/politics' },
+  { id: 'state',         name: 'राज्य (छ.ग.)',  path: '/category/state' },
   { id: 'local',         name: 'देश',             path: '/category/local' },
   { id: 'international', name: 'विदेश',           path: '/category/international' },
   { id: 'sports',        name: 'खेल',             path: '/category/sports' },
   { id: 'business',      name: 'व्यापार',         path: '/category/business' },
-  { id: 'technology',    name: 'टेक',             path: '/category/technology' },
   { id: 'entertainment', name: 'मनोरंजन',         path: '/category/entertainment' },
+  { id: 'technology',    name: 'टेक',             path: '/category/technology' },
+];
+
+const MORE_CATEGORIES = [
   { id: 'health',        name: 'स्वास्थ्य',       path: '/category/health' },
-  { id: 'science',       name: 'विज्ञान',         path: '/category/science' },
   { id: 'environment',   name: 'पर्यावरण',        path: '/category/environment' },
-  { id: 'world',         name: 'विश्व',           path: '/category/world' },
+  { id: 'science',       name: 'विज्ञान',         path: '/category/science' },
   { id: 'education',     name: 'शिक्षा',          path: '/category/education' },
   { id: 'lifestyle',     name: 'जीवनशैली',        path: '/category/lifestyle' },
-  { id: 'opinion',       name: 'राय',             path: '/category/opinion' },
+  { id: 'opinion',       name: 'संपादकीय',        path: '/category/opinion' },
   { id: 'reader-news',   name: 'पाठक समाचार',    path: '/category/reader-news' },
-  { id: 'trending',      name: 'ट्रेंडिंग',      path: '/trending' },
 ];
 
 /* ── Colour tokens (mirrors index.css @theme) ── */
@@ -60,29 +62,9 @@ export default function Header() {
 
   const isActive = (path) => location.pathname === path;
 
-  const navLinkStyle = (path) => ({
-    padding: '10px 14px',
-    fontSize: 13,
-    fontWeight: 600,
-    textDecoration: 'none',
-    whiteSpace: 'nowrap',
-    color: isActive(path) ? C.red : C.headline,
-    borderBottom: isActive(path) ? `2px solid ${C.red}` : '2px solid transparent',
-    background: isActive(path) ? '#FEF2F2' : 'transparent',
-    transition: 'all 0.2s ease',
-  });
-
   return (
     <>
-      <header style={{
-        background: '#FFFFFF',
-        borderBottom: `1px solid ${C.border}`,
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        boxShadow: '0 1px 6px rgba(0,0,0,0.07)',
-      }}>
-
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-y border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.03)]">
         {/* ── Utility Top Bar ── */}
         <div className="hidden md:block" style={{ background: C.dark, padding: '5px 0' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -94,24 +76,7 @@ export default function Header() {
             {/* Right utilities */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               {/* Live TV badge */}
-              <span style={{
-                display: 'flex', alignItems: 'center', gap: 5,
-                background: C.red, color: '#fff',
-                fontSize: 11, fontWeight: 700, padding: '2px 10px',
-                borderRadius: 3, letterSpacing: '0.05em',
-              }}>
-                <span className="animate-live-dot" style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#fff' }} />
-                LIVE TV
-              </span>
-
-              {/* ई-पेपर badge */}
-              <span style={{
-                color: '#fff', fontSize: 11, fontWeight: 600,
-                border: `1px solid #334155`, padding: '2px 10px',
-                borderRadius: 3, letterSpacing: '0.03em', display: 'flex', alignItems: 'center', gap: 4,
-              }}>
-                <FileText size={12} /> ई-पेपर
-              </span>
+              
 
               {/* Quick links */}
               {[['खबर भेजें', '/apni-khabar'], ['संपर्क', '/contact'], ['हमारे बारे में', '/about']].map(([label, path]) => (
@@ -138,7 +103,24 @@ export default function Header() {
 
           {/* ── Logo ── */}
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-            <img src="/logo.webp" alt="RED NEWS BHARAT" style={{ height: 45, objectFit: 'contain' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <img src="/logo.webp" alt="RED NEWS BHARAT" 
+              className="w-20 h-20 rounded-4xl"
+                
+                />
+              <div className="">
+                <div className='text-3xl font-bold'>
+                  <span className=' text-red-600'>RED NEWS </span>
+                <span>BHARAT</span>
+                </div>
+                <div className='text-sm border-t-2 border-red-400  '> 
+                  <span className=''>Reality </span>
+                  <span className=''>Economics </span>
+                  <span className=''>Democracy</span>
+                </div>
+              </div>
+            </div>
+         
           </Link>
 
           {/* ── Right Actions ── */}
@@ -175,36 +157,59 @@ export default function Header() {
               </button>
             )}
 
-            <Link href={token ? '/admin' : '/admin/login'}
-              style={{
-                background: C.red,
-                color: '#fff',
-                padding: '7px 16px',
-                borderRadius: 4,
-                fontSize: 12,
-                fontWeight: 700,
-                textDecoration: 'none',
-                whiteSpace: 'nowrap',
-                letterSpacing: '0.02em',
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = C.redDark}
-              onMouseLeave={e => e.currentTarget.style.background = C.red}
-            >
-              {token ? <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Settings size={14} /> पैनल</span> : <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><User size={14} /> लॉगिन</span>}
-            </Link>
+            
           </div>
         </div>
 
         {/* ── Desktop & Mobile Swipeable Nav Bar ── */}
-        <nav className="flex items-center gap-4 overflow-x-auto whitespace-nowrap scrollbar-none px-4 py-2.5 border-b border-slate-200 bg-white" style={{ borderBottom: `2px solid ${C.red}` }}>
-          <div style={{ display: 'flex', minWidth: 'max-content', padding: '0 8px' }}>
-            <Link href="/" style={navLinkStyle('/')}>होम</Link>
+        <nav className="relative w-full overflow-hidden">
+          <div className="flex items-center justify-center gap-1.5 overflow-x-auto scrollbar-none py-2 px-4" style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}>
+            <Link 
+              href="/" 
+              className={`rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-150 ${isActive('/') ? 'bg-red-600 text-white shadow-sm shadow-red-500/25 px-4 py-1.5' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-3.5 py-1.5'}`}
+            >
+              होम
+            </Link>
             {NAV_ITEMS.map(item => (
-              <Link key={item.id} href={item.path} style={navLinkStyle(item.path)}>
+              <Link 
+                key={item.id} 
+                href={item.path} 
+                className={`rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-150 ${isActive(item.path) ? 'bg-red-600 text-white shadow-sm shadow-red-500/25 px-4 py-1.5' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-3.5 py-1.5'}`}
+              >
                 {item.name}
               </Link>
             ))}
+            
+            {/* Trending Special Tab */}
+            <Link 
+              href="/trending" 
+              className={`rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-150 flex items-center gap-1 ${isActive('/trending') ? 'bg-red-600 text-white shadow-sm shadow-red-500/25 px-4 py-1.5' : 'text-red-600 hover:bg-red-50 px-3.5 py-1.5'}`}
+            >
+               ट्रेंडिंग
+            </Link>
+
+            {/* Dropdown for More Categories */}
+            <div className="relative group/more">
+              <button className="rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-150 text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-3.5 py-1.5 flex items-center gap-1">
+                अन्य ▾
+              </button>
+              
+              {/* Dropdown Menu */}
+              <div className="absolute top-full right-0 mt-1 opacity-0 invisible group-hover/more:opacity-100 group-hover/more:visible transition-all duration-200 bg-white border border-slate-200 rounded-xl shadow-lg p-2 grid grid-cols-2 gap-1 min-w-[240px] z-50">
+                {MORE_CATEGORIES.map(item => (
+                  <Link 
+                    key={item.id} 
+                    href={item.path} 
+                    className={`rounded-md text-xs font-semibold px-3 py-2 transition-colors ${isActive(item.path) ? 'bg-red-50 text-red-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right Fade Mask for scrolling hint */}
+            <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white/95 to-transparent pointer-events-none md:hidden" />
           </div>
         </nav>
       </header>

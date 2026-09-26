@@ -51,6 +51,8 @@ app.use('/api/admin', require('./routes/admin'))
 app.use('/api/notifications', require('./routes/notification'))
 app.use('/api/ai', require('./routes/ai.route'))
 app.use('/api/reader-news', require('./routes/readerNews'))
+app.use('/api/web-stories', require('./routes/webStories'));
+app.use('/api/polls', require('./routes/polls'));
 
 app.get('/health',(req,res)=>{
     res.status(200).json({

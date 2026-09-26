@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --color-brand-red: #DC2626;
@@ -11,15 +12,15 @@
   --color-text-excerpt: #475569;
   --color-text-meta: #94A3B8;
 
-  --font-poppins: var(--font-poppins), 'Poppins', sans-serif;
-  --font-ui: var(--font-poppins), 'Poppins', sans-serif;
-  --font-headline: var(--font-headline), 'Anek Devanagari', 'Teko', sans-serif;
+  --font-poppins: var(--font-editorial), 'Karma', serif;
+  --font-ui: var(--font-editorial), 'Karma', serif;
+  --font-headline: var(--font-editorial), 'Karma', serif;
   --font-editorial: var(--font-editorial), 'Karma', serif;
   --font-body: var(--font-editorial), 'Karma', serif;
-  --font-description: var(--font-description), 'Eczar', serif;
+  --font-description: var(--font-editorial), 'Karma', serif;
   
-  --font-sans: var(--font-poppins), 'Poppins', system-ui, sans-serif;
-  --font-hindi: var(--font-headline), 'Anek Devanagari', system-ui, sans-serif;
+  --font-sans: var(--font-editorial), 'Karma', serif;
+  --font-hindi: var(--font-editorial), 'Karma', serif;
 }
 
 @layer base {

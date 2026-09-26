@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { fetchNews, fetchTrending } from "@/store/slice/NewsSlice";
 import NewsCard from "@/components/news/NewsCard";
-import { Landmark, Trophy, Laptop, TrendingUp, Activity, Microscope, Leaf, Film, Newspaper, PenTool, Flame } from 'lucide-react';
+import { Landmark, Trophy, Laptop, TrendingUp, Activity, Microscope, Leaf, Film, Newspaper, PenTool, Flame, Camera, MessageSquare, Share2 } from 'lucide-react';
+import WebStoriesStrip from "@/components/home/WebStoriesStrip";
+import InteractiveDailyPoll from "@/components/home/InteractiveDailyPoll";
 import AdUnit from "@/components/common/AdUnit";
 
 /* ── Category quick-access data ── */
@@ -36,8 +38,8 @@ export default function HomePage() {
     <>
       
 
-      {/* Top Banner Ad */}
-      <AdUnit position="home-top" />
+      {/* Web Stories Strip */}
+      <WebStoriesStrip />
 
       {isLoading ? (
         /* ── Loading Skeleton ── */
@@ -95,10 +97,21 @@ export default function HomePage() {
                       <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13, lineHeight: 1.6, marginBottom: 12 }} className="line-clamp-2">
                         {featuredNews.summary}
                       </p>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><PenTool size={12} /> {featuredNews.authorName || 'संपादक'}</span>
-                        <span>•</span>
-                        <span>{new Date(featuredNews.publishedAt).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><PenTool size={12} /> {featuredNews.authorName || 'संपादक'}</span>
+                          <span>•</span>
+                          <span>{new Date(featuredNews.publishedAt).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          <span className="inline-flex items-center gap-1 font-semibold text-emerald-400 bg-emerald-900/40 px-2.5 py-0.5 rounded-full" style={{ fontSize: '11px', backdropFilter: 'blur(4px)' }}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 
+                            1.4k पढ़ रहे हैं
+                          </span>
+                          <button onClick={(e) => { e.preventDefault(); }} className="bg-white/10 p-1.5 rounded-full hover:bg-white/20 transition-colors">
+                            <Share2 className="w-4 h-4 text-white" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -165,6 +178,7 @@ export default function HomePage() {
 
             {/* ── Sidebar Column ── */}
             <div className="flex flex-col gap-6">
+              <InteractiveDailyPoll />
               {/* ── Trending / बड़ी खबरें Sidebar ── */}
               <div className="flex flex-col gap-0" style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: 10, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
                 {/* Sidebar header */}
@@ -198,6 +212,14 @@ export default function HomePage() {
                       <h3 style={{ fontWeight: 700, fontSize: 13, color: '#0F172A', lineHeight: 1.4 }} className="line-clamp-2 group-hover:text-[#DC2626] transition-colors">
                         {item.title}
                       </h3>
+                      <div className="flex items-center justify-between mt-3">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> {Math.floor(Math.random() * 5) + 1}.{Math.floor(Math.random() * 9)}k पढ़ रहे हैं
+                        </span>
+                        <button onClick={(e) => { e.preventDefault(); }} className="p-1 hover:bg-slate-100 rounded-full transition-colors">
+                          <Share2 className="w-4 h-4 text-slate-400 hover:text-emerald-600" />
+                        </button>
+                      </div>
                     </div>
                   </Link>
                 ))}
@@ -263,39 +285,31 @@ export default function HomePage() {
           {/* ══════════════════════════════════════════
               CITIZEN JOURNALISM CTA
           ══════════════════════════════════════════ */}
-          <div
-            className="mb-10 flex flex-col sm:flex-row items-center justify-between gap-6 rounded-xl p-8"
-            style={{ background: '#1E293B', border: '1px solid #334155' }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                <span style={{ background: '#DC2626', color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 3, letterSpacing: '0.06em' }}>CITIZEN JOURNALISM</span>
+          <div className="mb-10 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-xl p-6 md:p-8 border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden">
+            {/* Background design element */}
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+            <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
+            
+            <div className="flex items-start gap-4 relative z-10 w-full md:w-auto">
+              <div className="bg-white/10 p-3 rounded-lg flex-shrink-0 mt-1">
+                <Camera size={28} className="text-emerald-400" />
               </div>
-              <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 20, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Newspaper size={20} /> अपनी खबर भेजें
-              </h3>
-              <p style={{ color: '#94A3B8', fontSize: 14, lineHeight: 1.6 }}>
-                क्या आपके पास कोई महत्वपूर्ण खबर है? हमें भेजें और हम उसे लाखों पाठकों तक पहुँचाएंगे।
-              </p>
+              <div>
+                <h3 className="font-bold text-xl md:text-2xl mb-1.5 flex items-center gap-2">
+                  क्या आपके क्षेत्र में कोई जनसमस्या है? <span className="text-emerald-400 hidden sm:inline">हमें भेजें</span>
+                </h3>
+                <p className="text-slate-300 text-sm md:text-base">
+                  आपकी खबर, आपकी आवाज़। वीडियो या फोटो भेजें और हम उसे दिखाएंगे।
+                </p>
+              </div>
             </div>
+            
             <Link href="/apni-khabar"
-              style={{
-                background: '#DC2626',
-                color: '#fff',
-                padding: '12px 28px',
-                borderRadius: 6,
-                fontWeight: 700,
-                fontSize: 14,
-                textDecoration: 'none',
-                whiteSpace: 'nowrap',
-                letterSpacing: '0.02em',
-                flexShrink: 0,
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = '#B91C1C'}
-              onMouseLeave={e => e.currentTarget.style.background = '#DC2626'}
+              className="relative z-10 flex items-center gap-2 bg-[#25D366] hover:bg-[#1EBE5A] text-white px-6 py-3.5 rounded-lg font-bold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(37,211,102,0.3)] w-full md:w-auto justify-center"
+              style={{ textDecoration: 'none' }}
             >
-              खबर भेजें →
+              <MessageSquare size={18} />
+              सीधे WhatsApp पर भेजें
             </Link>
           </div>
 

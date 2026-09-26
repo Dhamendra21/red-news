@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { 
   PenSquare, FileText, Image as ImageIcon, Search, 
   Sparkles, Bot, Edit2, Loader, Flame, Pin, TrendingUp, 
-  Send, Save, UploadCloud, Trash2, X 
+  Send, Save, UploadCloud, Trash2, X, PlayCircle, Link
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -30,7 +30,7 @@ export default function AdminNewsForm() {
     title: '', summary: '', content: '', category: 'national',
     status: 'draft', isTrending: false, isBreaking: false, isFeatured: false,
     metaTitle: '', metaDescription: '', metaKeywords: '',
-    tags: ''
+    tags: '', videoUrl: ''
   });
   const [images, setImages] = useState([]);
   const [uploadingImages, setUploadingImages] = useState(false);
@@ -49,11 +49,16 @@ export default function AdminNewsForm() {
           isBreaking: n.isBreaking || false, isFeatured: n.isFeatured || false,
           metaTitle: n.metaTitle || '', metaDescription: n.metaDescription || '',
           metaKeywords: n.metaKeywords?.join(', ') || '',
-          tags: n.tags?.join(', ') || ''
+          tags: n.tags?.join(', ') || '',
+          videoUrl: n.videoUrl || ''
         });
+        
         setImages(n.images || []);
       }).catch(() => toast.error('समाचार लोड नहीं हो सका'));
     }
+
+    
+    
   }, [id, isEdit]);
 
   const handleImageUpload = async (files) => {
@@ -138,7 +143,8 @@ export default function AdminNewsForm() {
       status,
       images,
       metaKeywords: form.metaKeywords.split(',').map(k => k.trim()).filter(Boolean),
-      tags: form.tags.split(',').map(t => t.trim()).filter(Boolean)
+      tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
+      hasVideo: Boolean(form.videoUrl)
     };
     try {
       if (isEdit) {
@@ -164,6 +170,13 @@ export default function AdminNewsForm() {
       ['clean']
     ]
   };
+
+  const extractYoutubeId = (url) => {
+    if (!url) return null;
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&]{11})/);
+    return match ? match[1] : null;
+  };
+  const youtubeId = extractYoutubeId(form.videoUrl);
 
   return (
     <div className="bg-slate-50/60 min-h-screen p-6 font-sans">
@@ -300,7 +313,7 @@ export default function AdminNewsForm() {
                     <div className="border border-slate-200 rounded-lg overflow-hidden [&_.ql-toolbar]:border-none [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-slate-200 [&_.ql-toolbar]:bg-slate-50 [&_.ql-container]:border-none [&_.ql-editor]:text-base [&_.ql-editor]:text-slate-800">
                       <ReactQuill
                         value={form.content}
-                        onChange={value => setForm({ ...form, content: value })}
+                        onChange={value => setForm(prev => ({ ...prev, content: value }))}
                         modules={quillModules}
                         style={{ height: '400px' }}
                         placeholder="विस्तृत समाचार यहाँ लिखें..."
@@ -486,6 +499,62 @@ export default function AdminNewsForm() {
                       <p className="text-[11px] text-slate-400 mt-1 font-medium bg-slate-200/50 px-2 py-0.5 rounded">1280 × 720 px अनुशंसित</p>
                     </>
                   )}
+                </div>
+              )}
+            </div>
+
+            {/* YouTube Video Link */}
+            <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-800 mb-3">
+                <PlayCircle className="w-5 h-5 text-red-600" />
+                यूट्यूब वीडियो लिंक (YouTube Video)
+              </label>
+              
+              <div className="relative mb-3">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Link className="w-4 h-4 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="youtube.com/watch?v=..."
+                  value={form.videoUrl}
+                  onChange={e => setForm({ ...form, videoUrl: e.target.value })}
+                  className="w-full border border-slate-200 rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-slate-800 bg-slate-50"
+                />
+              </div>
+
+              {youtubeId && (
+                <div className="mt-4 space-y-3">
+                  <div className="aspect-video w-full rounded-lg overflow-hidden border border-slate-200 bg-black">
+                    <iframe 
+                      width="100%" 
+                      height="100%" 
+                      src={`https://www.youtube.com/embed/${youtubeId}`} 
+                      title="YouTube Preview" 
+                      frameBorder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  
+                  <button
+                    onClick={() => {
+                      const thumbUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+                      const newImage = { url: thumbUrl, caption: 'YouTube Thumbnail', isMain: true };
+                      if (images.length > 0) {
+                        const newImages = [...images];
+                        newImages[0] = newImage;
+                        setImages(newImages);
+                      } else {
+                        setImages([newImage]);
+                      }
+                      toast.success('यूट्यूब थंबनेल को मुख्य कवर फोटो बना दिया गया है');
+                    }}
+                    className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-700 py-2.5 rounded-lg text-sm font-semibold border border-red-200 transition-colors"
+                  >
+                    <ImageIcon className="w-4 h-4" />
+                    यूट्यूब थंबनेल को मुख्य कवर फोटो बनाएं
+                  </button>
                 </div>
               )}
             </div>

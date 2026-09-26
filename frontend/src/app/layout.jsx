@@ -2,25 +2,25 @@ import { Poppins, Anek_Devanagari, Karma, Eczar } from 'next/font/google';
 import '../index.css';
 import { Providers } from "./providers";
 
-const poppins = Poppins({
+const poppins = Karma({
   weight: ['400', '500', '600', '700'],
-  subsets: ['latin'],
+  subsets: ['devanagari'],
   variable: '--font-poppins',
 });
 
-const anek = Anek_Devanagari({
-  weight: ['600', '700', '800'],
+const anek = Karma({
+  weight: ['400', '500', '600', '700'],
   subsets: ['devanagari'],
   variable: '--font-headline',
 });
 
 const karma = Karma({
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   subsets: ['devanagari'],
   variable: '--font-editorial',
 });
 
-const eczar = Eczar({
+const eczar = Karma({
   weight: ['400', '500', '600', '700'],
   subsets: ['devanagari'],
   variable: '--font-description',

@@ -24,6 +24,8 @@ const NewsSchema = new mongoose.Schema({
     caption: { type: String },
     isMain:  { type: Boolean, default: false }
   }],
+  videoUrl:    { type: String, trim: true },
+  hasVideo:    { type: Boolean, default: false },
   author:     { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
   authorName: { type: String },
 

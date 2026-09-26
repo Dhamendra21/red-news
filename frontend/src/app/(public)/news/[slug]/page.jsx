@@ -301,6 +301,13 @@ const RelatedCard = ({ news }) => (
   </Link>
 );
 
+// ── Extract YouTube ID ─────────────────────────────────────
+const extractYoutubeId = (url) => {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&]{11})/);
+  return match ? match[1] : null;
+};
+
 // ── Main Page ─────────────────────────────────────────────
 export default function NewsDetailPage() {
   const { slug } = useParams();
@@ -423,6 +430,7 @@ export default function NewsDetailPage() {
   const relatedNews = list
     .filter((n) => n._id !== news._id && n.category === news.category)
     .slice(0, 4);
+  const youtubeId = extractYoutubeId(news.videoUrl);
 
   return (
     <>
@@ -540,8 +548,19 @@ export default function NewsDetailPage() {
               </div>
             </div>
 
-            {/* Images Grid / Main Image */}
-            {news.images?.length > 0 && (
+            {/* Images Grid / Main Image / Video */}
+            {youtubeId ? (
+              <div className="aspect-video w-full rounded-xl overflow-hidden bg-black mb-5 border border-slate-200 shadow-sm">
+                <iframe 
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${youtubeId}?autoplay=0&rel=0`} 
+                  title={news.title} 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+                ></iframe>
+              </div>
+            ) : news.images?.length > 0 && (
               <div style={{ marginBottom: 20 }}>
                 {news.images.length === 1 ? (
                   // Single Image
